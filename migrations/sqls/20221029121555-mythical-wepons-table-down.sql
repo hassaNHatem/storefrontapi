@@ -1,1 +1,0 @@
-REMOVE TABLE mythical_weapons;
