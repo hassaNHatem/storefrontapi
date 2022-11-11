@@ -32,4 +32,18 @@ export class productStore {
       throw new Error(`cannot create new product ${product.name}`);
     }
   }
+
+  async show(id: number): Promise<product> {
+    try {
+      const conn = await client.connect();
+      const sql = 'select * from product where id=($1)';
+      const result = await conn.query(sql, [Number(id)]);
+      console.log(result.rows.length);
+
+      conn.release();
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`cannot get product ${id}`);
+    }
+  }
 }
