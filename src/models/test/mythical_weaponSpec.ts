@@ -1,4 +1,4 @@
-import { weapon, MythicalWeaponStore } from '../mythical_weapon';
+import { weapon, MythicalWeaponStore } from '../product';
 const store = new MythicalWeaponStore();
 
 describe('mythical wepons model', () => {

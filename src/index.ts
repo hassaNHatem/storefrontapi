@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import methical_weapons_routes from './handlers/mythical_weapons';
+import products_routes from './handlers/products';
 import user_routes from './handlers/user';
 dotenv.config();
 
@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.get('/', function (req: Request, res: Response) {
   res.send('Hello World!');
 });
-methical_weapons_routes(app);
+products_routes(app);
 user_routes(app);
 app.listen(3000, function () {
   console.log(`starting app on: ${address}`);

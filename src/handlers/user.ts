@@ -18,11 +18,16 @@ const create = async (req: Request, res: Response) => {
 };
 const authenticate = async (req: Request, res: Response) => {
   const user: user = {
-    username: req.body.username,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
     password: req.body.password,
   };
   try {
-    const u = await store.authenticate(user.username, user.password);
+    const u = await store.authenticate(
+      user.firstname,
+      user.lastname,
+      user.password
+    );
     var token = jwt.sign({ user: u }, process.env.TOKEN_SECRET as string);
     res.json(token);
   } catch (err) {
