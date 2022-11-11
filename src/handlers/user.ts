@@ -16,6 +16,15 @@ const create = async (req: Request, res: Response) => {
     res.json(err + req.body);
   }
 };
+const index = async (req: Request, res: Response) => {
+  try {
+    const users = await store.index();
+    res.json(users);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
+};
 const authenticate = async (req: Request, res: Response) => {
   const user: user = {
     firstname: req.body.firstname,
@@ -38,5 +47,6 @@ const authenticate = async (req: Request, res: Response) => {
 const user_routes = (app: express.Application) => {
   app.post('/register', create);
   app.post('/login', authenticate);
+  app.get('/users', index);
 };
 export default user_routes;

@@ -37,6 +37,20 @@ export class User {
     }
   }
 
+  async index(): Promise<user[]> {
+    try {
+      // @ts-ignore
+      const conn = await client.connect();
+      const sql = 'select firstname,lastname from users';
+      const result = await conn.query(sql);
+      const user = result.rows;
+      conn.release();
+      return user;
+    } catch (err) {
+      throw new Error(`unable get users`);
+    }
+  }
+
   async authenticate(
     firstname: string,
     lastname: string,
