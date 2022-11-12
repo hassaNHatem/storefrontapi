@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -13,7 +13,17 @@ const corsOptions = {
   origin: 'http://someotherdomain.com',
   optionsSuccessStatus: 200,
 };
-
+export function ensureToken(req: any, res: Response, next: NextFunction) {
+  const bearerheader = req.headers['authorization'];
+  if (typeof bearerheader !== 'undefined') {
+    const bearer = bearerheader.split(' ');
+    const bearertoken = bearer[1];
+    req.token = bearertoken;
+    next();
+  } else {
+    res.sendStatus(403);
+  }
+}
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 

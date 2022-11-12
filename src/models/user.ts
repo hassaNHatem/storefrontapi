@@ -1,6 +1,8 @@
 import client from '../database';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
+
 dotenv.config();
 
 export type user = {
@@ -50,7 +52,20 @@ export class User {
       throw new Error(`unable get users`);
     }
   }
-
+  async show(id: number): Promise<user> {
+    try {
+      // @ts-ignore
+      const conn = await client.connect();
+      const sql = 'select firstname,lastname from users where id=($1)';
+      const result = await conn.query(sql, [id]);
+      const user = result.rows[0];
+      conn.release();
+      console.log(user);
+      return user;
+    } catch (err) {
+      throw new Error(`unable get user with id ${id}`);
+    }
+  }
   async authenticate(
     firstname: string,
     lastname: string,
