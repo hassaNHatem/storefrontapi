@@ -14,15 +14,25 @@ const index = async (_req: Request, res: Response) => {
   res.json(products);
 };
 const create = async (_req: any, res: Response) => {
-  jwt.verify(_req.token, process.env.TOKEN_SECRET as string);
-  const product = await store.create(_req.body);
-  res.json(product);
+  try {
+    jwt.verify(_req.token, process.env.TOKEN_SECRET as string);
+    const product = await store.create(_req.body);
+    res.json(product);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
 };
 
 const show = async (_req: Request, res: Response) => {
-  const product = await store.show(Number(_req.query.id));
-  console.log(_req.query.id);
-  res.json(product);
+  try {
+    const product = await store.show(Number(_req.query.id));
+    console.log(_req.query.id);
+    res.json(product);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
 };
 const products_routes = (app: express.Application) => {
   app.get('/products', index);
