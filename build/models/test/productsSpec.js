@@ -20,4 +20,19 @@ describe('product modal', () => {
         const result = yield store.index();
         expect(result).toEqual([]);
     }));
+    it('should have create method', () => {
+        expect(store.create).toBeDefined();
+    });
+    it('creates a new product', () => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield store.create({
+            id: 1,
+            name: 'testproduct',
+            price: 20,
+        });
+        expect(result).toEqual({
+            id: 1,
+            product_name: 'testproduct',
+            price: '20',
+        });
+    }));
 });

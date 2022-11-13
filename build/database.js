@@ -12,7 +12,7 @@ console.log('ss', ENV);
 if (ENV === 'dev') {
     client = new pg_1.Pool({
         host: POSTGRES_HOST,
-        database: POSTGRES_TEST_DB,
+        database: POSTGRES_DB,
         user: POSTGRES_USER,
         password: POSTGRES_PASSWORD,
     });
@@ -20,7 +20,7 @@ if (ENV === 'dev') {
 else {
     client = new pg_1.Pool({
         host: POSTGRES_HOST,
-        database: POSTGRES_DB,
+        database: POSTGRES_TEST_DB,
         user: POSTGRES_USER,
         password: POSTGRES_PASSWORD,
     });

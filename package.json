@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
+    "db:down":"npx db-migrate reset",
     "start": "nodemon src/index.ts",
     "build": "npx tsc",
     "jasmine": "jasmine",
     "migrate": "db-migrate --env test up && db-migrate up",
-    "test": "set ENV=test db-migrate --env test up && jasmine && db-migrate db:drop test",
+    "test": "set ENV=test&& npx db-migrate --env test up && jasmine && npx db-migrate --env test reset",
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier --config .prettierrc \"**/*.{ts,tsx}\" --write",
