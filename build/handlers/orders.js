@@ -22,7 +22,7 @@ dotenv_1.default.config();
 const addOrder = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         jsonwebtoken_1.default.verify(_req.token, process.env.TOKEN_SECRET);
-        const order = yield store.addOrder(_req.body.userId);
+        const order = yield store.addOrder(parseInt(_req.body.userId));
         res.json(order);
     }
     catch (err) {
@@ -35,7 +35,8 @@ const addProduct = (_req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const productId = _req.body.product_id;
     const quantity = parseInt(_req.body.quantity);
     try {
-        jsonwebtoken_1.default.verify(_req.token, process.env.TOKEN_SECRET);
+        process.env.ENV !== 'test' &&
+            jsonwebtoken_1.default.verify(_req.token, process.env.TOKEN_SECRET);
         const addedProduct = yield store.addProduct(quantity, orderId, productId);
         console.log(orderId);
         res.json(addedProduct);

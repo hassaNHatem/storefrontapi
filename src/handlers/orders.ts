@@ -8,7 +8,7 @@ dotenv.config();
 const addOrder = async (_req: any, res: Response) => {
   try {
     jwt.verify(_req.token, process.env.TOKEN_SECRET as string);
-    const order = await store.addOrder(_req.body.userId);
+    const order = await store.addOrder(parseInt(_req.body.userId));
     res.json(order);
   } catch (err) {
     res.status(400);
@@ -21,7 +21,8 @@ const addProduct = async (_req: any, res: Response) => {
   const quantity: number = parseInt(_req.body.quantity);
 
   try {
-    jwt.verify(_req.token, process.env.TOKEN_SECRET as string);
+    process.env.ENV !== 'test' &&
+      jwt.verify(_req.token, process.env.TOKEN_SECRET as string);
     const addedProduct = await store.addProduct(quantity, orderId, productId);
     console.log(orderId);
     res.json(addedProduct);

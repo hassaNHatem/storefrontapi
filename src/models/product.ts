@@ -2,7 +2,7 @@ import { connect } from 'http2';
 import client from '../database';
 
 export type product = {
-  id: Number;
+  id?: Number;
   name: string;
   price: number;
 };

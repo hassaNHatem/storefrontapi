@@ -15,14 +15,17 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 export function ensureToken(req: any, res: Response, next: NextFunction) {
-  const bearerheader = req.headers['authorization'];
-  if (typeof bearerheader !== 'undefined') {
-    const bearer = bearerheader.split(' ');
-    const bearertoken = bearer[1];
-    req.token = bearertoken;
-    next();
+  if (process.env.ENV === 'test') {
   } else {
-    res.sendStatus(403);
+    const bearerheader = req.headers['authorization'];
+    if (typeof bearerheader !== 'undefined') {
+      const bearer = bearerheader.split(' ');
+      const bearertoken = bearer[1];
+      req.token = bearertoken;
+      next();
+    } else {
+      res.sendStatus(403);
+    }
   }
 }
 app.use(cors(corsOptions));

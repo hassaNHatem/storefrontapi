@@ -36,11 +36,12 @@ class Order {
     addOrder(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const sql = 'INSERT INTO orders (user_id , status) VALUES($1 , $2)';
+                const sql = 'INSERT INTO orders (user_id , status) VALUES($1 , $2) returning *';
                 const conn = yield database_1.default.connect();
                 const result = yield conn.query(sql, [userId, 'active']);
                 const order = result.rows[0];
                 conn.release();
+                console.log(result.rows);
                 return order;
             }
             catch (err) {

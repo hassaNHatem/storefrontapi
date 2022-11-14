@@ -6,13 +6,18 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 export type order = {
-  quantity: number;
-  order_id: number;
-  product_id: number;
+  id: 1;
+  user_id: string;
+  status: string;
 };
-
+export type productorder = {
+  id: number;
+  quantity: number;
+  order_id: string;
+  product_id: string;
+};
 export class Order {
-  async getOrder(userId: number): Promise<Order> {
+  async getOrder(userId: number): Promise<order> {
     try {
       const sql = 'SELECT * from orders where user_id=($1) and status=($2)';
       const conn = await client.connect();
@@ -25,13 +30,16 @@ export class Order {
       throw new Error(`Could not get order`);
     }
   }
-  async addOrder(userId: number): Promise<Order> {
+  async addOrder(userId: number): Promise<order> {
     try {
-      const sql = 'INSERT INTO orders (user_id , status) VALUES($1 , $2)';
+      const sql =
+        'INSERT INTO orders (user_id , status) VALUES($1 , $2) returning *';
       const conn = await client.connect();
       const result = await conn.query(sql, [userId, 'active']);
       const order = result.rows[0];
       conn.release();
+      console.log(result.rows);
+
       return order;
     } catch (err) {
       throw new Error(`Could not add order`);
@@ -41,7 +49,7 @@ export class Order {
     quantity: number,
     orderId: string,
     productId: string
-  ): Promise<Order> {
+  ): Promise<productorder> {
     try {
       console.log(orderId);
       const sql =
@@ -50,7 +58,6 @@ export class Order {
       const conn = await client.connect();
 
       const result = await conn.query(sql, [quantity, orderId, productId]);
-
       const order = result.rows[0];
 
       conn.release();

@@ -25,10 +25,25 @@ describe('product modal', () => {
     });
     it('creates a new product', () => __awaiter(void 0, void 0, void 0, function* () {
         const result = yield store.create({
+            name: 'testproduct',
+            price: 20,
+        });
+        expect(result).toEqual({
+            id: 1,
+            product_name: 'testproduct',
+            price: '20',
+        });
+    }));
+    it('has a show method', () => __awaiter(void 0, void 0, void 0, function* () {
+        expect(store.show).toBeDefined();
+    }));
+    it('shows specific product with id', () => __awaiter(void 0, void 0, void 0, function* () {
+        const proeduct = yield store.create({
             id: 1,
             name: 'testproduct',
             price: 20,
         });
+        const result = yield store.show(1);
         expect(result).toEqual({
             id: 1,
             product_name: 'testproduct',
