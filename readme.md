@@ -10,7 +10,7 @@
 
 to get the database up and running just run db-migrate up
 
-# api endpoints
+### api endpoints
 
 ## users
 
@@ -30,3 +30,7 @@ to get the database up and running just run db-migrate up
 - add order : domain/orders(post request) body:{userId:string} (require token)
 - get order : /orders(get request) body:{userId:string} (require token)
 - add product to oder :domain/orders/:id/products body:{quantity:number , product_id:string} (require token)
+
+### testing
+
+    to start testing run : npm run build then npm run test
