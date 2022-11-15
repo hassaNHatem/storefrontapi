@@ -24,6 +24,15 @@
 - SALT_ROUNDS=10
 - TOKEN_SECRET=alohomora123
 
+### db setup
+
+in sql run :
+create database storefront;
+create database storefront_test;
+create user magical with password 'password123';
+grant all privileges on database storefront to magical;
+grant all privileges on database storefront_test to magical;
+
 ### database schema
 
 - users (
