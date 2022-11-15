@@ -8,7 +8,46 @@
 
 ## user password for both : password123
 
-to get the database up and running just run db-migrate up
+## port number : 5432
+
+    to get the database up and running just run db-migrate up
+
+## enviroument varibales
+
+- POSTGRES_HOST=127.0.0.1
+- POSTGRES_DB=storefront
+- POSTGRES_TEST_DB = storefront_test
+- POSTGRES_USER=magical
+- POSTGRES_PASSWORD=password123
+- ENV=dev
+- BCRYPT_PASSWORD=speak-friend-and-enter
+- SALT_ROUNDS=10
+- TOKEN_SECRET=alohomora123
+
+### database schema
+
+- users (
+  id SERIAL PRIMARY KEY,
+  firstname VARCHAR(100),
+  lastname VARCHAR(100),
+  password_digest VARCHAR(100)
+  );
+- product (
+  id SERIAL PRIMARY KEY,
+  product_name VARCHAR(100),
+  price VARCHAR(100)
+  );
+- orders (
+  id SERIAL PRIMARY KEY,
+  user_id bigint REFERENCES users(id),
+  status VARCHAR(100)
+  );
+- order_products (
+  id SERIAL PRIMARY KEY,
+  quantity integer,
+  order_id bigint REFERENCES orders(id),
+  product_id bigint REFERENCES product(id)
+  );
 
 ### api endpoints
 

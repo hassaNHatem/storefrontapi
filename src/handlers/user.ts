@@ -9,7 +9,6 @@ const store = new User();
 
 const create = async (req: any, res: Response) => {
   try {
-    jwt.verify(req.token, process.env.TOKEN_SECRET as string);
     const user = await store.create(req.body);
     var token = jwt.sign({ user: user }, process.env.TOKEN_SECRET as string);
     res.json(token);
@@ -58,7 +57,7 @@ const authenticate = async (req: any, res: Response) => {
   }
 };
 const user_routes = (app: express.Application) => {
-  app.post('/register', ensureToken, create);
+  app.post('/register', create);
   app.post('/login', authenticate);
   app.get('/users', ensureToken, index);
   app.get('/users/get', ensureToken, show);
