@@ -33,6 +33,10 @@ create user magical with password 'password123';
 grant all privileges on database storefront to magical;
 grant all privileges on database storefront_test to magical;
 
+### packages setup
+
+    npm i
+
 ### database schema
 
 - users (
