@@ -66,7 +66,7 @@ grant all privileges on database storefront_test to magical;
 
 ## users
 
-- creating user :domain/register(post request) body: {firstname:string , lastname:string , password:string} (require token)
+- creating user :domain/register(post request) body: {firstname:string , lastname:string , password:string}
 - login : domain/login(post request) body: {firstname:string , lastname:string , password:string}
 - index : domain/users(get request) (require token)
 - getuser : domain/users/get/{userid}(get request) (require token)
