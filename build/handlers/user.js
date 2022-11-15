@@ -20,7 +20,6 @@ dotenv_1.default.config();
 const store = new user_1.User();
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        jsonwebtoken_1.default.verify(req.token, process.env.TOKEN_SECRET);
         const user = yield store.create(req.body);
         var token = jsonwebtoken_1.default.sign({ user: user }, process.env.TOKEN_SECRET);
         res.json(token);
@@ -69,7 +68,7 @@ const authenticate = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 const user_routes = (app) => {
-    app.post('/register', __1.ensureToken, create);
+    app.post('/register', create);
     app.post('/login', authenticate);
     app.get('/users', __1.ensureToken, index);
     app.get('/users/get', __1.ensureToken, show);

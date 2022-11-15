@@ -19,19 +19,15 @@ const corsOptions = {
     optionsSuccessStatus: 200,
 };
 function ensureToken(req, res, next) {
-    if (process.env.ENV === 'test') {
+    const bearerheader = req.headers['authorization'];
+    if (typeof bearerheader !== 'undefined') {
+        const bearer = bearerheader.split(' ');
+        const bearertoken = bearer[1];
+        req.token = bearertoken;
+        next();
     }
     else {
-        const bearerheader = req.headers['authorization'];
-        if (typeof bearerheader !== 'undefined') {
-            const bearer = bearerheader.split(' ');
-            const bearertoken = bearer[1];
-            req.token = bearertoken;
-            next();
-        }
-        else {
-            res.sendStatus(403);
-        }
+        res.sendStatus(403);
     }
 }
 exports.ensureToken = ensureToken;
@@ -46,3 +42,4 @@ app.get('/', function (req, res) {
 app.listen(3000, function () {
     console.log(`starting app on: ${address}`);
 });
+exports.default = app;

@@ -1,7 +1,8 @@
 import { User } from '../user';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-
+import supertest from 'supertest';
+import app from '../../index';
 const store = new User();
 describe('user auth', async () => {
   it('should authenticate user login', async () => {

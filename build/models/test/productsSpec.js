@@ -8,9 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // import { weapon, MythicalWeaponStore } from '../product';
 const product_1 = require("../product");
+const supertest_1 = __importDefault(require("supertest"));
+const index_1 = __importDefault(require("../../index"));
+const user_1 = require("../user");
+const user = new user_1.User();
 const store = new product_1.productStore();
 describe('product modal', () => {
     it('should have an index', () => {
@@ -49,5 +56,32 @@ describe('product modal', () => {
             product_name: 'testproduct',
             price: '20',
         });
+    }));
+});
+const request = (0, supertest_1.default)(index_1.default);
+describe('testing products endpoints', () => {
+    const token = user.create({
+        firstname: 'has',
+        lastname: 'has',
+        password: 'has',
+    });
+    it('return 200 when using endpoint /products', () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield request.get('/products');
+        expect(response.status).toBe(200);
+    }));
+    it('return 200 when using endpoint /products/add', () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield request
+            .post('/products/add')
+            .set('Content-type', 'application/json')
+            .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InBhc3N3b3JkX2RpZ2VzdCI6IiQyYiQxMCQwL0dYQ3BCSzBSeDVGc3VzZUdaLm51NmwzQnFYMTkzT0tNY0hDWWM4b1d4RzVjZGQuL1FKLiJ9LCJpYXQiOjE2NjgyODA3MzF9.-6gest7HQiCSEkgCqFAhu-X5A8DmDt1VIyusV9roYAc')
+            .send({ name: 'producttest', price: '15' });
+        // const response = await request
+        //   .post('/products/add')
+        //   .set({ name: 'producttest', price: '15' });
+        expect(res.status).toBe(200);
+    }));
+    it('return 200 when using endpoint /products/get', () => __awaiter(void 0, void 0, void 0, function* () {
+        const res = yield request.get('/products/get?id=1');
+        expect(res.status).toBe(200);
     }));
 });

@@ -15,17 +15,14 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 export function ensureToken(req: any, res: Response, next: NextFunction) {
-  if (process.env.ENV === 'test') {
+  const bearerheader = req.headers['authorization'];
+  if (typeof bearerheader !== 'undefined') {
+    const bearer = bearerheader.split(' ');
+    const bearertoken = bearer[1];
+    req.token = bearertoken;
+    next();
   } else {
-    const bearerheader = req.headers['authorization'];
-    if (typeof bearerheader !== 'undefined') {
-      const bearer = bearerheader.split(' ');
-      const bearertoken = bearer[1];
-      req.token = bearertoken;
-      next();
-    } else {
-      res.sendStatus(403);
-    }
+    res.sendStatus(403);
   }
 }
 app.use(cors(corsOptions));
@@ -40,3 +37,4 @@ user_routes(app);
 app.listen(3000, function () {
   console.log(`starting app on: ${address}`);
 });
+export default app;

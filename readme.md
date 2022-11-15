@@ -75,7 +75,7 @@ grant all privileges on database storefront_test to magical;
 
 - index : domain/products(get request)
 - add : domian/products/add(post request) body:{name:string , price:string} (require token)
-- get product : domain/products/get/{productid}(post request)
+- get product : domain/products/get?id=1(post request)
 
 ## orders
 
