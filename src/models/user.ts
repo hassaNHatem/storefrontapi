@@ -12,31 +12,28 @@ export type user = {
 };
 
 export class User {
-  async create(u: user): Promise<user> {
+  async create(u: user): Promise<user | null> {
     const pepper = process.env.BCRYPT_PASSWORD;
 
-    try {
-      // @ts-ignore
-      const conn = await client.connect();
-      const sql =
-        'INSERT INTO users (firstname,lastname,password_digest) VALUES($1, $2,$3) RETURNING *';
+    // @ts-ignore
+    const conn = await client.connect();
+    const sql =
+      'INSERT INTO users (firstname,lastname,password_digest) VALUES($1, $2,$3) RETURNING *';
 
-      const hash = bcrypt.hashSync(
-        u.password + pepper,
-        process.env.saltRounds ? parseInt(process.env.saltRounds) : 10
-      );
-
+    const hash = bcrypt.hashSync(
+      u.password + pepper,
+      process.env.saltRounds ? parseInt(process.env.saltRounds) : 10
+    );
+    if (u.firstname && u.lastname && u.password) {
       const result = await conn.query(sql, [u.firstname, u.lastname, hash]);
+
       const user = result.rows[0];
 
       conn.release();
 
       return user;
-    } catch (err) {
-      throw new Error(
-        `unable create user (${u.firstname} ${u.lastname}): ${err}`
-      );
     }
+    return null;
   }
 
   async index(): Promise<user[]> {
