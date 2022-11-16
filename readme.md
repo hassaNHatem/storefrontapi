@@ -68,7 +68,7 @@ alter user magical with superuser;
 - creating user :domain/register(post request) body: {firstname:string , lastname:string , password:string}
 - login : domain/login(post request) body: {firstname:string , lastname:string , password:string}
 - index : domain/users(get request) (require token)
-- getuser : domain/users/get/{userid}(get request) (require token)
+- getuser : domain/users/get?id={userid}(get request) (require token)
 
 ## products
 

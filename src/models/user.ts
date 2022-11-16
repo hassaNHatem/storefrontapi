@@ -13,18 +13,19 @@ export type user = {
 
 export class User {
   async create(u: user): Promise<user | null> {
-    const pepper = process.env.BCRYPT_PASSWORD;
+    try {
+      const pepper = process.env.BCRYPT_PASSWORD;
 
-    // @ts-ignore
-    const conn = await client.connect();
-    const sql =
-      'INSERT INTO users (firstname,lastname,password_digest) VALUES($1, $2,$3) RETURNING *';
+      // @ts-ignore
+      const conn = await client.connect();
+      const sql =
+        'INSERT INTO users (firstname,lastname,password_digest) VALUES($1, $2,$3) RETURNING *';
 
-    const hash = bcrypt.hashSync(
-      u.password + pepper,
-      process.env.saltRounds ? parseInt(process.env.saltRounds) : 10
-    );
-    if (u.firstname && u.lastname && u.password) {
+      const hash = bcrypt.hashSync(
+        u.password + pepper,
+        process.env.saltRounds ? parseInt(process.env.saltRounds) : 10
+      );
+
       const result = await conn.query(sql, [u.firstname, u.lastname, hash]);
 
       const user = result.rows[0];
@@ -32,8 +33,9 @@ export class User {
       conn.release();
 
       return user;
+    } catch (err) {
+      throw new Error(`unable to create user`);
     }
-    return null;
   }
 
   async index(): Promise<user[]> {
@@ -68,24 +70,30 @@ export class User {
     lastname: string,
     password: string
   ): Promise<User | null> {
-    const pepper = process.env.BCRYPT_PASSWORD;
-    const conn = await client.connect();
-    const sql =
-      'SELECT password_digest FROM users WHERE firstname=($1) and lastname=($2)';
+    try {
+      const pepper = process.env.BCRYPT_PASSWORD;
+      const conn = await client.connect();
+      const sql =
+        'SELECT password_digest FROM users WHERE firstname=($1) and lastname=($2)';
 
-    const result = await conn.query(sql, [firstname, lastname]);
-    console.log(result.rows.length);
-    console.log(password + pepper);
+      const result = await conn.query(sql, [firstname, lastname]);
+      console.log(result.rows.length);
+      console.log(password + pepper);
 
-    if (result.rows.length > 0) {
-      const user = result.rows[0];
+      if (result.rows.length > 0) {
+        const user = result.rows[0];
 
-      console.log(bcrypt.compareSync(password + pepper, user.password_digest));
+        console.log(
+          bcrypt.compareSync(password + pepper, user.password_digest)
+        );
 
-      if (bcrypt.compareSync(password + pepper, user.password_digest))
-        return user;
+        if (bcrypt.compareSync(password + pepper, user.password_digest))
+          return user;
+      }
+
+      return null;
+    } catch (err) {
+      throw new Error(`unable to login`);
     }
-
-    return null;
   }
 }

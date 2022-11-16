@@ -3,6 +3,7 @@ import { productStore } from '../product';
 import { User } from '../user';
 import supertest from 'supertest';
 import app from '../../index';
+import { response } from 'express';
 const user = new User();
 const store = new Order();
 const product = new productStore();
@@ -51,5 +52,15 @@ describe('testing order endpoints', () => {
       )
       .send({ quantity: 250, product_id: '1' });
     expect(response.status).toBe(400);
+  });
+  it('returns 200 when using endpoint /orders/:id', async () => {
+    const response = await request
+      .get(`/orders/1`)
+      .set('Content-type', 'application/json')
+      .set(
+        'Authorization',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InBhc3N3b3JkX2RpZ2VzdCI6IiQyYiQxMCQwL0dYQ3BCSzBSeDVGc3VzZUdaLm51NmwzQnFYMTkzT0tNY0hDWWM4b1d4RzVjZGQuL1FKLiJ9LCJpYXQiOjE2NjgyODA3MzF9.-6gest7HQiCSEkgCqFAhu-X5A8DmDt1VIyusV9roYAc'
+      );
+    expect(response.status).toBe(200);
   });
 });

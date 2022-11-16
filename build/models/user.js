@@ -20,8 +20,8 @@ dotenv_1.default.config();
 class User {
     create(u) {
         return __awaiter(this, void 0, void 0, function* () {
-            const pepper = process.env.BCRYPT_PASSWORD;
             try {
+                const pepper = process.env.BCRYPT_PASSWORD;
                 // @ts-ignore
                 const conn = yield database_1.default.connect();
                 const sql = 'INSERT INTO users (firstname,lastname,password_digest) VALUES($1, $2,$3) RETURNING *';
@@ -32,7 +32,7 @@ class User {
                 return user;
             }
             catch (err) {
-                throw new Error(`unable create user (${u.firstname} ${u.lastname}): ${err}`);
+                throw new Error(`unable to create user`);
             }
         });
     }
@@ -71,19 +71,24 @@ class User {
     }
     authenticate(firstname, lastname, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const pepper = process.env.BCRYPT_PASSWORD;
-            const conn = yield database_1.default.connect();
-            const sql = 'SELECT password_digest FROM users WHERE firstname=($1) and lastname=($2)';
-            const result = yield conn.query(sql, [firstname, lastname]);
-            console.log(result.rows.length);
-            console.log(password + pepper);
-            if (result.rows.length > 0) {
-                const user = result.rows[0];
-                console.log(bcrypt_1.default.compareSync(password + pepper, user.password_digest));
-                if (bcrypt_1.default.compareSync(password + pepper, user.password_digest))
-                    return user;
+            try {
+                const pepper = process.env.BCRYPT_PASSWORD;
+                const conn = yield database_1.default.connect();
+                const sql = 'SELECT password_digest FROM users WHERE firstname=($1) and lastname=($2)';
+                const result = yield conn.query(sql, [firstname, lastname]);
+                console.log(result.rows.length);
+                console.log(password + pepper);
+                if (result.rows.length > 0) {
+                    const user = result.rows[0];
+                    console.log(bcrypt_1.default.compareSync(password + pepper, user.password_digest));
+                    if (bcrypt_1.default.compareSync(password + pepper, user.password_digest))
+                        return user;
+                }
+                return null;
             }
-            return null;
+            catch (err) {
+                throw new Error(`unable to login`);
+            }
         });
     }
 }
